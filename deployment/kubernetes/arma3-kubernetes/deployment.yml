@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arma3
+  namespace: arma3
+  labels:
+    app: arma3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arma3
+  serviceName: arma3
+  template:
+    metadata:
+      labels:
+        app: arma3
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: arma3-dedicated
+          image: ewohltman/arma3-kubernetes:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "256Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          ports:
+            - name: arma3-game-port
+              containerPort: 2302
+              protocol: UDP
+            - name: steam-query-port
+              containerPort: 2303
+              protocol: UDP
+            - name: steam--port
+              containerPort: 2304
+              protocol: UDP
+            - name: von-port
+              containerPort: 2305
+              protocol: UDP
+            - name: battleeye-port
+              containerPort: 2306
+              protocol: UDP
+        - name: arma3-headless-client
+          image: ewohltman/arma3-kubernetes:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "256Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
